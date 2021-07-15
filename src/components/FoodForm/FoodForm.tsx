@@ -1,24 +1,35 @@
 import React from "react";
+// import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Food from "../../model/Food";
+import FoodFacts from "../../model/FoodFacts";
 import SetState from "../../util/setState";
 
 type inputParams = {
-    food?: Food,
-    setFood: SetState<Food>,
+    food?: FoodFacts,
+    setFood: SetState<FoodFacts>,
 }
 const FoodForm: React.FC<inputParams> = ({ food, setFood }) => {
-    const { register, getValues, watch } = useForm<Food>({ defaultValues: food });
+    const { register, getValues, watch } = useForm<FoodFacts>({ defaultValues: food });
 
     watch(() => setFood(getValues()));
 
+    // useEffect(() => {
+    //     if (food) {
+    //         setValue("kcal", food.kcal);
+
+    //         setValue("protein", food.protein);
+    //         setValue("fats", food.fats);
+    //         setValue("carbs", food.carbs);
+    //     }
+    // }, [food, setValue]);
+
     return (
         <form>
-            <label>
+            {/* <label>
                 <br></br>
                 Name
                 <input {...register("name")} />
-            </label>
+            </label> */}
 
             <label>
                 <br></br>

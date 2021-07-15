@@ -1,18 +1,24 @@
+import FoodFacts from "./FoodFacts";
+
 export default interface Food {
+    id: string;
+
     name: string;
 
-    kcal: number;
+    foodFacts: FoodFacts;
 
-    protein: number;
-    fats: number;
-    carbs: number;
+    images: string[];
+
+    brands: string[];
+    stores: string[];
+
 }
 
-export const createEmptyFood = (): Food => ({
-    name: "",
+export const createEmptyFood = (): FoodFacts => ({
+    // name: "",
 
     kcal: 0,
-    
+
     protein: 0,
     carbs: 0,
     fats: 0,

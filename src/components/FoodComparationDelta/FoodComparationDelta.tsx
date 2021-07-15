@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import React, { useMemo } from "react";
-import Food from "../../model/Food";
+import FoodFacts from "../../model/FoodFacts";
 
-const calcDelta = (targetFood: Food, targetQuantity: number, sourceFood: Food, sourceFoodQuantity: number) => (
+const calcDelta = (targetFood: FoodFacts, targetQuantity: number, sourceFood: FoodFacts, sourceFoodQuantity: number) => (
     {
         name: "",
 
@@ -17,8 +17,8 @@ type inputParams = {
     factor: number;
     sourceFoodQuantity: number;
 
-    sourceFood: Food;
-    targetFood: Food;
+    sourceFood: FoodFacts;
+    targetFood: FoodFacts;
 }
 
 const getPositiveNegative = (n: number) => ({

@@ -1,9 +1,9 @@
 import equateFood from "../services/equateFood";
-import Food from "../model/Food";
+import FoodFacts from "../model/FoodFacts";
 
 describe('equate food', () => {
-    let sourceFood: Food;
-    let targetFood: Food;
+    let sourceFood: FoodFacts;
+    let targetFood: FoodFacts;
 
     beforeEach(() => {
         sourceFood = {

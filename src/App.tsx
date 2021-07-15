@@ -1,47 +1,51 @@
-import { Fragment, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { ChakraProvider, FormControl, FormLabel, Input, Box } from '@chakra-ui/react';
 import './App.css';
 import FoodComparationDelta from './components/FoodComparationDelta/FoodComparationDelta';
-import FoodForm from './components/FoodForm/FoodForm';
-import Food, { createEmptyFood } from './model/Food';
+import SearchFood from './components/SearchFood/SearchFood';
+import FoodFacts, { createEmptyFoodFacts } from './model/FoodFacts';
 import equateFood from './services/equateFood';
 
 function App() {
-  const [baseFood, setBaseFood] = useState<Food>(createEmptyFood());
-  const [targetFood, setTargetFood] = useState<Food>(createEmptyFood());
+  const [sourceFood, setSourceFood] = useState<FoodFacts>(createEmptyFoodFacts());
+  const [targetFood, setTargetFood] = useState<FoodFacts>(createEmptyFoodFacts());
 
-  const [baseQuantity, setBaseQuantity] = useState(0);
+  const [baseQuantity, setBaseQuantity] = useState(100);
 
-  const factor = useMemo(() => equateFood(baseFood, targetFood), [baseFood, targetFood]);
+  const factor = useMemo(() => equateFood(sourceFood, targetFood), [sourceFood, targetFood]);
 
   return (
-    <Fragment>
-      <h3>Base Food</h3>
-      <label>
-        Base quantity (g)
+    <ChakraProvider>
 
-        <input type="number" min="0" onChange={(e) => { setBaseQuantity(Number.parseInt(e.target.value)) }}></input>
-      </label>
-      <FoodForm food={baseFood} setFood={setBaseFood}></FoodForm>
-      <hr></hr>
+      <Box as="h3" fontSize="xl" fontWeight="bold">Search Food</Box>
+      <SearchFood setSourceFood={setSourceFood} setTargetFood={setTargetFood}></SearchFood>
 
-      <h3>Target Food</h3>
-      <FoodForm food={targetFood} setFood={setTargetFood}></FoodForm>
+      <Box mt="10" as="h3" fontSize="xl" fontWeight="bold">Base Food</Box>
 
-      <hr></hr>
+      <FormControl id="name">
+        <FormLabel>Base quantity (g)</FormLabel>
+        <Input type="number" min="0" defaultValue="100" onChange={(e) => { setBaseQuantity(Number.parseInt(e.target.value)) }} />
+        {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
+      </FormControl>
 
-      <h3>Result</h3>
+      {/* <FoodForm food={sourceFood} setFood={setSourceFood}></FoodForm> */}
+
+      {/* <Box as="h3" fontSize="xl" fontWeight="bold">Target Food</Box> */}
+      {/* <FoodForm food={targetFood} setFood={setTargetFood}></FoodForm> */}
+
+
+      <Box mt="10" as="h3" fontSize="xl" fontWeight="bold">Result</Box>
       Factor: {factor.toFixed(2)}
-
 
       <FoodComparationDelta
         factor={factor}
         sourceFoodQuantity={baseQuantity}
 
-        sourceFood={baseFood}
+        sourceFood={sourceFood}
         targetFood={targetFood}
       ></FoodComparationDelta>
 
-    </Fragment>
+    </ChakraProvider>
   );
 }
 
