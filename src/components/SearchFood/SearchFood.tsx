@@ -60,7 +60,7 @@ const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
             }
             {response !== null ?
                 <div>
-                    <SimpleGrid columns={5} spacing={2}>
+                    <SimpleGrid columns={{ "sm": 1, "md": 3, "lg": 5, "xl": 6,  }} spacing={2}>
                         {response.foods.map(food =>
                             <FoodCard food={food}>
                                 <Button colorScheme="blue" mx={1} onClick={() => {
