@@ -1,11 +1,14 @@
-import { Box, Button, FormControl, FormLabel, Input, SimpleGrid } from "@chakra-ui/react";
+import { SearchIcon } from "@chakra-ui/icons";
+import { Box, Button, FormControl, FormLabel, IconButton, Input, Select, SimpleGrid } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import FoodFacts from "../../model/FoodFacts";
 import { SearchFoodResponse } from "../../model/SearchFoodResponse";
 import SetState from "../../util/setState";
 import FoodCard from "../FoodCard/FoodCard";
+import Pagination from "../Pagination/Pagination";
 
 type params = {
     setSourceFood: SetState<FoodFacts>;
@@ -14,45 +17,78 @@ type params = {
 
 type FormData = {
     foodName: string;
+    store: string;
+    page: number;
+}
+export interface StoreData {
+    id: string;
+    known: number;
+    name: string;
+    products: number;
+    url: string;
 }
 
 const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
-    const { register, handleSubmit, getValues } = useForm<FormData>();
+    const { register, handleSubmit, getValues, setValue } = useForm<FormData>();
 
     const [response, setResponse] = useState<SearchFoodResponse | null>(null);
 
-    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
 
-    const fetchSearch = useCallback(
-        () => {
-            setLoading(true);
-            setResponse(null);
+    const [stores, setStores] = useState<StoreData[]>([{
+        id: "",
+        known: Number.MAX_VALUE,
+        name: "",
+        products: Number.MAX_VALUE,
+        url: "",
+    }]);
 
-            fetch(`/api/searchFood?foodName=${getValues().foodName}&page=${page}`)
-                .then(res => res.json())
-                .then((res: SearchFoodResponse) => setResponse(res))
-                .finally(() => setLoading(false));
-        }
-        , [getValues, page]
-    )
+    useEffect(() => {
+        fetch('/data/stores.json')
+            .then(res => res.json())
+            .then((res: { tags: StoreData[] }) => setStores(stores => [...stores, ...res.tags]));
+    }, [])
 
-    const onSubmit = handleSubmit(formData => {
+    const fetchSearch = useCallback(() => {
+        setLoading(true);
+        setResponse(null);
 
-        setPage(1);
+        const queryString = new URLSearchParams(getValues() as unknown as Record<string, string>).toString();
 
+        fetch(`/api/searchFood?${queryString}`)
+            .then(res => res.json())
+            .then((res: SearchFoodResponse) => setResponse(res))
+            .finally(() => setLoading(false));
+    }, [getValues])
+
+    const onSubmit = handleSubmit(() => {
+        setValue("page", 1);
         fetchSearch();
     });
 
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <FormControl id="name">
+                <FormControl id="name" mt="3">
                     <FormLabel>Food name</FormLabel>
                     <Input {...register("foodName")} />
                     {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
                 </FormControl>
-                <Button type="submit">Search</Button>
+                <FormControl id="store" mt="3">
+                    <FormLabel>Store name</FormLabel>
+                    <Select {...register("store")} >
+                        {stores.sort((a, b) => b.products - a.products).map(store =>
+                            <option value={store.id}>{store.name}</option>
+                        )}
+                    </Select>
+                    {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
+                </FormControl>
+                <IconButton mt="3"
+                    colorScheme="blue"
+                    aria-label="Search foods"
+                    icon={<SearchIcon />}
+                    type="submit"
+                >Search</IconButton>
             </form>
             {loading ?
                 <Box fontSize="3xl" fontWeight="bold">Loading...</Box>
@@ -60,7 +96,7 @@ const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
             }
             {response !== null ?
                 <div>
-                    <SimpleGrid columns={{ "sm": 1, "md": 3, "lg": 5, "xl": 6,  }} spacing={2}>
+                    <SimpleGrid columns={{ "sm": 1, "md": 3, "lg": 5, "xl": 6, }} spacing={2} my="5">
                         {response.foods.map(food =>
                             <FoodCard food={food}>
                                 <Button colorScheme="blue" mx={1} onClick={() => {
@@ -73,20 +109,15 @@ const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
                         )}
                     </SimpleGrid>
                     <div>
-                        {generatePagesArray(response.page, response.page_count).map(page =>
-                            <Button onClick={() => {
-                                //TODO refactor
-                                setPage(page);
-                                fetchSearch();
-                            }}>{page}</Button>
-                        )}
+                        <Pagination currentPage={response.page} totalPages={response.page_count} onPageClick={(page) => {
+                            setValue('page', page);
+                            fetchSearch();
+                        }} ></Pagination>
                     </div>
-                    <hr></hr>
                 </div> : ""
             }
         </div>
     );
 }
-const generatePagesArray = (from: number, to: number) => Array.from({ length: (to - from) + 1 }, (_, i) => i + from)
 
 export default SearchFood;

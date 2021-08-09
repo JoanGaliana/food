@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import classNames from "classnames";
 import React, { useMemo } from "react";
 import FoodFacts from "../../model/FoodFacts";
@@ -39,7 +40,7 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, facto
 
     return (
         <div>
-            Target quantity: {targetQuantity.toFixed(2)}
+            Target quantity: <Box as="span" fontSize="xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)}</Box>
             <br></br>
             <br></br>
             <table>

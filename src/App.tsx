@@ -16,35 +16,35 @@ function App() {
 
   return (
     <ChakraProvider>
+      <Box px="3rem" pt="2rem">
+        <Box as="h3" fontSize="xl" fontWeight="bold">Search Food</Box>
+        <SearchFood setSourceFood={setSourceFood} setTargetFood={setTargetFood}></SearchFood>
 
-      <Box as="h3" fontSize="xl" fontWeight="bold">Search Food</Box>
-      <SearchFood setSourceFood={setSourceFood} setTargetFood={setTargetFood}></SearchFood>
+        <Box mt="10" as="h3" fontSize="xl" fontWeight="bold">Base Food</Box>
 
-      <Box mt="10" as="h3" fontSize="xl" fontWeight="bold">Base Food</Box>
+        <FormControl id="name">
+          <FormLabel>Base quantity (g)</FormLabel>
+          <Input type="number" min="0" defaultValue="100" onChange={(e) => { setBaseQuantity(Number.parseInt(e.target.value)) }} />
+          {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
+        </FormControl>
 
-      <FormControl id="name">
-        <FormLabel>Base quantity (g)</FormLabel>
-        <Input type="number" min="0" defaultValue="100" onChange={(e) => { setBaseQuantity(Number.parseInt(e.target.value)) }} />
-        {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
-      </FormControl>
+        {/* <FoodForm food={sourceFood} setFood={setSourceFood}></FoodForm> */}
 
-      {/* <FoodForm food={sourceFood} setFood={setSourceFood}></FoodForm> */}
-
-      {/* <Box as="h3" fontSize="xl" fontWeight="bold">Target Food</Box> */}
-      {/* <FoodForm food={targetFood} setFood={setTargetFood}></FoodForm> */}
+        {/* <Box as="h3" fontSize="xl" fontWeight="bold">Target Food</Box> */}
+        {/* <FoodForm food={targetFood} setFood={setTargetFood}></FoodForm> */}
 
 
-      <Box mt="10" as="h3" fontSize="xl" fontWeight="bold">Result</Box>
-      Factor: {factor.toFixed(2)}
+        <Box mt="10" as="h3" fontSize="xl" fontWeight="bold">Result</Box>
+        Factor: <Box as="span" fontSize="lg" fontWeight="bold">{factor.toFixed(2)}</Box>
 
-      <FoodComparationDelta
-        factor={factor}
-        sourceFoodQuantity={baseQuantity}
+        <FoodComparationDelta
+          factor={factor}
+          sourceFoodQuantity={baseQuantity}
 
-        sourceFood={sourceFood}
-        targetFood={targetFood}
-      ></FoodComparationDelta>
-
+          sourceFood={sourceFood}
+          targetFood={targetFood}
+        ></FoodComparationDelta>
+      </Box>
     </ChakraProvider>
   );
 }
