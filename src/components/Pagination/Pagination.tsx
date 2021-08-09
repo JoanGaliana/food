@@ -17,7 +17,7 @@ const Pagination: React.FC<inputParams> = ({ currentPage, totalPages, onPageClic
             <Button onClick={() => onPageClick(1)} colorScheme={getColorSchemeSelected(1, currentPage)}>{1}</Button>
             {lowerBound !== 2 ? "..." : ""}
             {generatePagesArray(lowerBound, upperBound).map(page =>
-                <Button onClick={() => onPageClick(page)} colorScheme={getColorSchemeSelected(page, currentPage)} >{page} </Button>
+                <Button key={page} onClick={() => onPageClick(page)} colorScheme={getColorSchemeSelected(page, currentPage)} >{page} </Button>
             )}
             {upperBound !== totalPages - 1 ? "..." : ""}
             <Button onClick={() => onPageClick(totalPages)} colorScheme={getColorSchemeSelected(totalPages, currentPage)}>{totalPages}</Button>

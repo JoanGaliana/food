@@ -78,7 +78,7 @@ const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
                     <FormLabel>Store name</FormLabel>
                     <Select {...register("store")} >
                         {stores.sort((a, b) => b.products - a.products).map(store =>
-                            <option value={store.id}>{store.name}</option>
+                            <option key={store.id} value={store.id}>{store.name}</option>
                         )}
                     </Select>
                     {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
@@ -98,7 +98,7 @@ const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
                 <div>
                     <SimpleGrid columns={{ "sm": 1, "md": 3, "lg": 5, "xl": 6, }} spacing={2} my="5">
                         {response.foods.map(food =>
-                            <FoodCard food={food}>
+                            <FoodCard food={food} key={food.id}>
                                 <Button colorScheme="blue" mx={1} onClick={() => {
                                     setSourceFood(food.foodFacts);
                                 }}>Set source food</Button>

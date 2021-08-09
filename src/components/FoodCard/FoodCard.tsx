@@ -16,7 +16,7 @@ const FoodCard: React.FC<params> = ({ food, children }) => {
             <Box p="0.5rem" mt="0.5rem">
                 <Flex alignItems="baseline" overflow="hidden" h="1.5rem">
                     {food.stores.map(normalizeText).map(store =>
-                        <Badge ml="1" px={2} borderRadius="full" colorScheme="teal">{store}</Badge>
+                        <Badge key={store} ml="1" px={2} borderRadius="full" colorScheme="teal">{store}</Badge>
                     )}
                 </Flex>
 
