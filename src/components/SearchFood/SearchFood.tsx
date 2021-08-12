@@ -4,15 +4,16 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import FoodFacts from "../../model/FoodFacts";
+import Food from "../../model/Food";
 import { SearchFoodResponse } from "../../model/SearchFoodResponse";
-import SetState from "../../util/setState";
 import FoodCard from "../FoodCard/FoodCard";
 import Pagination from "../Pagination/Pagination";
 
 type params = {
-    setSourceFood: SetState<FoodFacts>;
-    setTargetFood: SetState<FoodFacts>;
+    onFoodSelect: (food: Food) => void;
+
+    title?: string;
+    buttonText?: string;
 }
 
 type FormData = {
@@ -28,7 +29,7 @@ export interface StoreData {
     url: string;
 }
 
-const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
+const SearchFood: React.FC<params> = ({ onFoodSelect, title = "Search food", buttonText = "Select" }) => {
     const { register, handleSubmit, getValues, setValue } = useForm<FormData>();
 
     const [response, setResponse] = useState<SearchFoodResponse | null>(null);
@@ -100,11 +101,8 @@ const SearchFood: React.FC<params> = ({ setSourceFood, setTargetFood }) => {
                         {response.foods.map(food =>
                             <FoodCard food={food} key={food.id}>
                                 <Button colorScheme="blue" mx={1} onClick={() => {
-                                    setSourceFood(food.foodFacts);
-                                }}>Set source food</Button>
-                                <Button colorScheme="blue" mx={1} onClick={() => {
-                                    setTargetFood(food.foodFacts);
-                                }}>Set target food</Button>
+                                    onFoodSelect(food);
+                                }}>{buttonText}</Button>
                             </FoodCard>
                         )}
                     </SimpleGrid>

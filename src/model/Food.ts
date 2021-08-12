@@ -1,4 +1,4 @@
-import FoodFacts from "./FoodFacts";
+import FoodFacts, { createEmptyFoodFacts } from "./FoodFacts";
 
 export default interface Food {
     id: string;
@@ -14,13 +14,16 @@ export default interface Food {
 
 }
 
-export const createEmptyFood = (): FoodFacts => ({
-    // name: "",
+export const createEmptyFood = (): Food => ({
+    id: "Empty",
 
-    kcal: 0,
+    name: "-Empty-",
 
-    protein: 0,
-    carbs: 0,
-    fats: 0,
+    foodFacts: createEmptyFoodFacts(),
+
+    images: [],
+    
+    brands: [],
+    stores: [],
 })
 
