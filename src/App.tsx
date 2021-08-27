@@ -1,8 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
-import { ChakraProvider, FormControl, FormLabel, Input, Box, Button, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, IconButton } from '@chakra-ui/react';
+import { useMemo, useState } from 'react';
+import { ChakraProvider, FormControl, FormLabel, Input, Box, Button, useDisclosure, SimpleGrid, IconButton } from '@chakra-ui/react';
 import './App.css';
 import FoodComparationDelta from './components/FoodComparationDelta/FoodComparationDelta';
-import SearchFood from './components/SearchFood/SearchFood';
 import equateFood from './services/equateFood';
 import FoodCard from './components/FoodCard/FoodCard';
 import Food from './model/Food';
