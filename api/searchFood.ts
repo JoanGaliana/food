@@ -1,7 +1,8 @@
 import { VercelApiHandler } from '@vercel/node';
 import fetch from "node-fetch";
 import * as OpenfoodfactsAPI from './types/openFoodFactsAPI';
-import Food from '../model/Food';
+import Food from '../src/model/Food';
+
 // &sort_by=unique_scans_n
 const getFoodRequestURL = (foodName: string, page: string = "1", store: string) => {
     let reqString = `https://es.openfoodfacts.org/cgi/search.pl?action=process&search_terms=${foodName}&page=${page}&page_size=12&json=true`
@@ -52,7 +53,7 @@ const mapOpenFoodsAPIProduct = (product: OpenfoodfactsAPI.Product): Food => ({
 })
 
 const imagesArrayFromProduct = (product: OpenfoodfactsAPI.Product): string[] => [
-    'image_front_url',
+    "image_front_url",
     'image_url',
     // 'image_front_small_url',
     // 'image_front_thumb_url',

@@ -42,7 +42,6 @@ export interface Product {
     stores_tags: string[];
 
     [key: string]: any;
-
 }
 
 export interface FindFoodResponse {
