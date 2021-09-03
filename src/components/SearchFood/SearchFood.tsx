@@ -91,12 +91,14 @@ const SearchFood: React.FC<params> = ({ onFoodSelect, title = "Search food", but
                     type="submit"
                 >Search</IconButton>
             </form>
-            {loading ?
-                <Box fontSize="3xl" fontWeight="bold">Loading...</Box>
-                : ""
-            }
-            {response !== null ?
+            {loading && <Box fontSize="3xl" fontWeight="bold">Loading...</Box>}
+
+            {response &&
                 <div>
+                    {response.foods.length === 0 &&
+                        <Box mt="2rem" fontSize="2xl" fontWeight="bold"> No results found</Box>
+                    }
+
                     <SimpleGrid columns={{ "sm": 1, "md": 3, "lg": 5, "xl": 6, }} spacing={2} my="5">
                         {response.foods.map(food =>
                             <FoodCard food={food} key={food.id}>
@@ -111,9 +113,12 @@ const SearchFood: React.FC<params> = ({ onFoodSelect, title = "Search food", but
                             setValue('page', page);
                             fetchSearch();
                         }} ></Pagination>
-                    </div>
-                </div> : ""
+                    </div>                                    
+                </div>
             }
+
+
+
         </div>
     );
 }
