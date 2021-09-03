@@ -1,42 +1,39 @@
 import { Box } from "@chakra-ui/react";
 import classNames from "classnames";
-import React, { useMemo } from "react";
-import FoodFacts from "../../model/FoodFacts";
+import React from "react";
+import Food from "../../model/Food";
+import equateFood from "../../services/equateFood";
+import "./FoodComparationDelta.css"
 
-const calcDelta = (targetFood: FoodFacts, targetQuantity: number, sourceFood: FoodFacts, sourceFoodQuantity: number) => (
+type inputParams = {
+    sourceFoodQuantity: number;
+
+    sourceFood: Food;
+    targetFood: Food;
+}
+
+const calcDelta = ({ foodFacts: targetFoodFacts }: Food, targetQuantity: number, { foodFacts: sourceFoodFacts }: Food, sourceFoodQuantity: number) => (
     {
         name: "",
 
-        kcal: ((targetFood.kcal * targetQuantity) - (sourceFood.kcal * sourceFoodQuantity)) / 100,
+        kcal: ((targetFoodFacts.kcal * targetQuantity) - (sourceFoodFacts.kcal * sourceFoodQuantity)) / 100,
 
-        protein: ((targetFood.protein * targetQuantity) - (sourceFood.protein * sourceFoodQuantity)) / 100,
-        carbs: ((targetFood.carbs * targetQuantity) - (sourceFood.carbs * sourceFoodQuantity)) / 100,
-        fats: ((targetFood.fats * targetQuantity) - (sourceFood.fats * sourceFoodQuantity)) / 100,
+        protein: ((targetFoodFacts.protein * targetQuantity) - (sourceFoodFacts.protein * sourceFoodQuantity)) / 100,
+        carbs: ((targetFoodFacts.carbs * targetQuantity) - (sourceFoodFacts.carbs * sourceFoodQuantity)) / 100,
+        fats: ((targetFoodFacts.fats * targetQuantity) - (sourceFoodFacts.fats * sourceFoodQuantity)) / 100,
     })
-
-type inputParams = {
-    factor: number;
-    sourceFoodQuantity: number;
-
-    sourceFood: FoodFacts;
-    targetFood: FoodFacts;
-}
 
 const getPositiveNegative = (n: number) => ({
     negative: n < 0,
     positive: n > 0,
 })
 
-const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, factor, sourceFood, targetFood }) => {
-    const targetQuantity = useMemo(
-        () => sourceFoodQuantity * factor,
-        [sourceFoodQuantity, factor]
-    );
+const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, sourceFood, targetFood }) => {
+    const factor = sourceFood && targetFood ? equateFood(sourceFood?.foodFacts, targetFood?.foodFacts) : -1;
 
-    const deltaValues = useMemo(
-        () => calcDelta(targetFood, targetQuantity, sourceFood, sourceFoodQuantity),
-        [targetFood, targetQuantity, sourceFood, sourceFoodQuantity]
-    );
+    const targetQuantity = sourceFoodQuantity * factor;
+
+    const deltaValues = calcDelta(targetFood, targetQuantity, sourceFood, sourceFoodQuantity);
 
     return (
         <div>
@@ -75,8 +72,4 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, facto
     );
 }
 
-
-
 export default FoodComparationDelta;
-
-

@@ -1,19 +1,16 @@
 import { SearchIcon } from "@chakra-ui/icons";
 import { Box, SimpleGrid, IconButton, Button, FormControl, FormLabel, Input, useDisclosure } from "@chakra-ui/react";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import FoodCard from "../components/FoodCard/FoodCard";
 import FoodComparationDelta from "../components/FoodComparationDelta/FoodComparationDelta";
 import SearchFoodModal from "../components/SearchFoodModal/SearchFoodModal";
 import Food from "../model/Food";
-import equateFood from "../services/equateFood";
 
 const EquatePage: React.FC = () => {
     const [sourceFood, setSourceFood] = useState<Food | null>(null);
     const [targetFood, setTargetFood] = useState<Food | null>(null);
 
     const [baseQuantity, setBaseQuantity] = useState(100);
-
-    const factor = useMemo(() => sourceFood && targetFood ? equateFood(sourceFood?.foodFacts, targetFood?.foodFacts) : -1, [sourceFood, targetFood]);
 
     const targetFoodDisclousure = useDisclosure();
     const sourceFoodDisclousure = useDisclosure();
@@ -63,11 +60,10 @@ const EquatePage: React.FC = () => {
 
         {targetFood && sourceFood ? (
             <FoodComparationDelta
-                factor={factor}
                 sourceFoodQuantity={baseQuantity}
 
-                sourceFood={sourceFood.foodFacts}
-                targetFood={targetFood.foodFacts}
+                sourceFood={sourceFood}
+                targetFood={targetFood}
             ></FoodComparationDelta>
         ) : ""}
     </Box>)
