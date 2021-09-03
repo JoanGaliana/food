@@ -1,5 +1,5 @@
 import { SearchIcon } from "@chakra-ui/icons";
-import { Box, SimpleGrid, IconButton, Button, FormControl, FormLabel, Input, useDisclosure } from "@chakra-ui/react";
+import { Box, SimpleGrid, IconButton, Button, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import FoodCard from "../components/FoodCard/FoodCard";
 import FoodComparationDelta from "../components/FoodComparationDelta/FoodComparationDelta";
@@ -10,7 +10,6 @@ const EquatePage: React.FC = () => {
     const [sourceFood, setSourceFood] = useState<Food | null>(null);
     const [targetFood, setTargetFood] = useState<Food | null>(null);
 
-    const [baseQuantity, setBaseQuantity] = useState(100);
 
     const targetFoodDisclousure = useDisclosure();
     const sourceFoodDisclousure = useDisclosure();
@@ -45,27 +44,22 @@ const EquatePage: React.FC = () => {
                 selectFood={setTargetFood}>
             </SearchFoodModal>
         </SimpleGrid>
+        {(targetFood || sourceFood) &&
+            <Button onClick={() => {
+                const aux = targetFood;
 
-        <Button onClick={() => {
-            const aux = targetFood;
+                setTargetFood(sourceFood);
+                setSourceFood(aux);
+            }}>Swap</Button>
+        }
 
-            setTargetFood(sourceFood);
-            setSourceFood(aux);
-        }}>Swap</Button>
 
-        <FormControl id="name" mb="2rem">
-            <FormLabel>Quantity (g)</FormLabel>
-            <Input type="number" min="0" defaultValue="100" onChange={(e) => { setBaseQuantity(Number.parseInt(e.target.value)) }} />
-        </FormControl>
-
-        {targetFood && sourceFood ? (
+        {targetFood && sourceFood &&
             <FoodComparationDelta
-                sourceFoodQuantity={baseQuantity}
-
                 sourceFood={sourceFood}
                 targetFood={targetFood}
             ></FoodComparationDelta>
-        ) : ""}
+        }
     </Box>)
 }
 

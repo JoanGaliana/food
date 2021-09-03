@@ -1,4 +1,4 @@
-import { Box, Button, Center, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@chakra-ui/react";
+import { Box, Button, Center, FormControl, FormLabel, Input, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@chakra-ui/react";
 import classNames from "classnames";
 import React, { useCallback } from "react";
 import { useEffect } from "react";
@@ -8,8 +8,6 @@ import equateFood, { FoodFactorEquateField } from "../../services/equateFood";
 import "./FoodComparationDelta.css"
 
 type inputParams = {
-    sourceFoodQuantity: number;
-
     sourceFood: Food;
     targetFood: Food;
 }
@@ -30,8 +28,9 @@ const getPositiveNegative = (n: number) => ({
     positive: n > 0,
 })
 
-const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, sourceFood, targetFood }) => {
+const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood }) => {
     const [factor, setFactor] = useState(1);
+    const [sourceFoodQuantity, setsourceFoodQuantity] = useState(100);
 
     const targetQuantity = sourceFoodQuantity * factor;
 
@@ -51,6 +50,11 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, sourc
 
     return (
         <div>
+            <FormControl id="name" mb="2rem">
+                <FormLabel>Quantity (g)</FormLabel>
+                <Input type="number" min="0" defaultValue="100" onChange={(e) => { setsourceFoodQuantity(Number.parseInt(e.target.value)) }} />
+            </FormControl>
+
             Target quantity: <Box as="span" fontSize="xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)}</Box>
             <br></br>
             <br></br>
