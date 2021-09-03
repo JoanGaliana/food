@@ -1,4 +1,4 @@
-import { Box, Button, Center } from "@chakra-ui/react";
+import { Box, Button, Center, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@chakra-ui/react";
 import classNames from "classnames";
 import React, { useCallback } from "react";
 import { useEffect } from "react";
@@ -54,6 +54,20 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, sourc
             Target quantity: <Box as="span" fontSize="xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)}</Box>
             <br></br>
             <br></br>
+
+            Factor: {factor.toFixed(2)}
+
+            <Slider
+                aria-label="slider-factor"
+                min={0.1} step={0.05} max={10}
+                onChange={(value) => { setFactor(value) }} value={factor}
+            >
+                <SliderTrack>
+                    <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb />
+            </Slider>
+
             <table>
                 <thead>
                     <tr>
