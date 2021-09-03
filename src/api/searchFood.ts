@@ -1,7 +1,7 @@
 import { VercelApiHandler } from '@vercel/node';
 import fetch from "node-fetch";
 import * as OpenfoodfactsAPI from './types/openFoodFactsAPI';
-import Food from '../src/model/Food';
+import Food from '../model/Food';
 // &sort_by=unique_scans_n
 const getFoodRequestURL = (foodName: string, page: string = "1", store: string) => {
     let reqString = `https://es.openfoodfacts.org/cgi/search.pl?action=process&search_terms=${foodName}&page=${page}&page_size=12&json=true`
@@ -9,8 +9,8 @@ const getFoodRequestURL = (foodName: string, page: string = "1", store: string) 
     if (store !== "") {
         reqString += `&tagtype_0=stores&tag_contains_0=contains&tag_0=${store}`
     }
-    console.log({reqString});
-    
+    console.log({ reqString });
+
     return reqString;
 }
 
@@ -51,7 +51,7 @@ const mapOpenFoodsAPIProduct = (product: OpenfoodfactsAPI.Product): Food => ({
     stores: product.stores_tags || [],
 })
 
-const imagesArrayFromProduct = (product: OpenfoodfactsAPI.Product) => [
+const imagesArrayFromProduct = (product: OpenfoodfactsAPI.Product): string[] => [
     'image_front_url',
     'image_url',
     // 'image_front_small_url',
@@ -65,7 +65,7 @@ const imagesArrayFromProduct = (product: OpenfoodfactsAPI.Product) => [
     // 'image_small_url',
     // 'image_thumb_url',
 ].reduce((images, key) => {
-    const value = product[key]
+    const value = String(product[key])
 
     if (value && value !== "") {
         images.push(value);

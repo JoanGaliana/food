@@ -3,10 +3,10 @@ export interface Product {
 
     generic_name: string;
     generic_name_es: string;
-    
+
     product_name: string;
     product_name_es: string;
-    
+
     product_quantity: string;
     quantity: string;
 
@@ -40,6 +40,8 @@ export interface Product {
 
     stores: string;
     stores_tags: string[];
+
+    [key: string]: any;
 
 }
 
