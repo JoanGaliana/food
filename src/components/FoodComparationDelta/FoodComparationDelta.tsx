@@ -1,8 +1,10 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button, Center } from "@chakra-ui/react";
 import classNames from "classnames";
-import React from "react";
+import React, { useCallback } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import Food from "../../model/Food";
-import equateFood from "../../services/equateFood";
+import equateFood, { FoodFactorEquateField } from "../../services/equateFood";
 import "./FoodComparationDelta.css"
 
 type inputParams = {
@@ -29,11 +31,23 @@ const getPositiveNegative = (n: number) => ({
 })
 
 const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, sourceFood, targetFood }) => {
-    const factor = sourceFood && targetFood ? equateFood(sourceFood?.foodFacts, targetFood?.foodFacts) : -1;
+    const [factor, setFactor] = useState(1);
 
     const targetQuantity = sourceFoodQuantity * factor;
 
     const deltaValues = calcDelta(targetFood, targetQuantity, sourceFood, sourceFoodQuantity);
+
+    const getEquateByFn = useCallback(
+        (factorName: FoodFactorEquateField) => () => setFactor(equateFood(sourceFood?.foodFacts, targetFood?.foodFacts, factorName)),
+        [sourceFood?.foodFacts, targetFood?.foodFacts]
+    );
+
+    useEffect(
+        () => {
+            getEquateByFn("kcal")();
+        }
+        , [getEquateByFn]
+    );
 
     return (
         <div>
@@ -43,29 +57,31 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFoodQuantity, sourc
             <table>
                 <thead>
                     <tr>
-                        <th>Kcal</th>
+                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('kcal')}>Kcal</Button></th>
 
-                        <th>Protein</th>
-                        <th>Carbs</th>
-                        <th>Fats</th>
+                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('protein')}>Protein</Button></th>
+                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('carbs')}>Carbs</Button></th>
+                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('fats')}>Fats</Button></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td className={classNames(getPositiveNegative(deltaValues.kcal))}>
-                            {deltaValues.kcal.toFixed(2)}
+                <tbody >
+
+                    <tr >
+                        <td className={classNames(getPositiveNegative(deltaValues.kcal))} >
+                            <Center>{deltaValues.kcal.toFixed(2)}</Center>
                         </td>
 
                         <td className={classNames(getPositiveNegative(deltaValues.protein))}>
-                            {deltaValues.protein.toFixed(2)}
+                            <Center>{deltaValues.protein.toFixed(2)}</Center>
                         </td>
                         <td className={classNames(getPositiveNegative(deltaValues.carbs))}>
-                            {deltaValues.carbs.toFixed(2)}
+                            <Center>{deltaValues.carbs.toFixed(2)}</Center>
                         </td>
                         <td className={classNames(getPositiveNegative(deltaValues.fats))}>
-                            {deltaValues.fats.toFixed(2)}
+                            <Center>{deltaValues.fats.toFixed(2)}</Center>
                         </td>
                     </tr>
+
                 </tbody>
             </table>
         </div>

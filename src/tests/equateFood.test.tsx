@@ -1,29 +1,32 @@
 import equateFood from "../services/equateFood";
 import FoodFacts from "../model/FoodFacts";
 
+const testFactors = {
+    kcal: 2,
+    protein: 3,
+    carbs: 4,
+    fats: 5,
+}
+
 describe('equate food', () => {
     let sourceFood: FoodFacts;
     let targetFood: FoodFacts;
 
     beforeEach(() => {
         sourceFood = {
-            name: "Brocoli",
-
             kcal: 100,
 
             protein: 200,
-            carbs: 300, 
+            carbs: 300,
             fats: 400,
         };
 
         targetFood = {
-            name: "Rice",
+            kcal: sourceFood.kcal / testFactors.kcal,
 
-            kcal: sourceFood.kcal / 2,
-
-            protein: sourceFood.protein / 3,
-            carbs: sourceFood.carbs / 4,
-            fats: sourceFood.fats / 5,
+            protein: sourceFood.protein / testFactors.protein,
+            carbs: sourceFood.carbs / testFactors.carbs,
+            fats: sourceFood.fats / testFactors.fats,
         };
     })
 
@@ -35,15 +38,29 @@ describe('equate food', () => {
     });
 
     test('by kcal explicit', () => {
-        const expectedResult = 2;
+        const expectedResult = testFactors.kcal;
         const actualResult = equateFood(sourceFood, targetFood, "kcal");
 
         expect(actualResult).toEqual(expectedResult);
     });
 
     test('by protein', () => {
-        const expectedResult = 3;
+        const expectedResult = testFactors.protein;
         const actualResult = equateFood(sourceFood, targetFood, "protein");
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    test('by carbs', () => {
+        const expectedResult = testFactors.carbs;
+        const actualResult = equateFood(sourceFood, targetFood, "carbs");
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    test('by fats', () => {
+        const expectedResult = testFactors.fats;
+        const actualResult = equateFood(sourceFood, targetFood, "fats");
 
         expect(actualResult).toEqual(expectedResult);
     });
