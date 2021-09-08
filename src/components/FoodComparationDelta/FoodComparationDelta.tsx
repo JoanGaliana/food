@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Food from "../../model/Food";
 import equateFood, { FoodFactorEquateField } from "../../services/equateFood";
+import SetState from "../../util/setState";
 import "./FoodComparationDelta.css"
 
 type inputParams = {
@@ -50,27 +51,14 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood })
 
     return (
         <div>
-            <FormControl id="name" mb="2rem">
-                <FormLabel>Quantity (g)</FormLabel>
+            <FormControl id="name" mb="4">
+                <FormLabel>Quantity of {sourceFood.name} (g)</FormLabel>
                 <Input type="number" min="0" defaultValue="100" onChange={(e) => { setsourceFoodQuantity(Number.parseInt(e.target.value)) }} />
             </FormControl>
 
-            Target quantity: <Box as="span" fontSize="xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)}</Box>
-            <br></br>
-            <br></br>
-
-            Factor: {factor.toFixed(2)}
-
-            <Slider
-                aria-label="slider-factor"
-                min={0.1} step={0.05} max={10}
-                onChange={(value) => { setFactor(value) }} value={factor}
-            >
-                <SliderTrack>
-                    <SliderFilledTrack />
-                </SliderTrack>
-                <SliderThumb />
-            </Slider>
+            <Box mb="1">
+                <Box as="span" fontSize="2xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)} g</Box> of {targetFood.name}
+            </Box>
 
             <table>
                 <thead>
@@ -102,8 +90,25 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood })
 
                 </tbody>
             </table>
+            <Box my="4">
+                Factor: {factor.toFixed(2)}
+            </Box>
+            <FactorSlider setFactor={setFactor} factor={factor}></FactorSlider>
         </div>
     );
+}
+
+function FactorSlider({ setFactor, factor }: { setFactor: SetState<number>, factor: number }) {
+    return <Slider
+        aria-label="slider-factor"
+        min={0.1} step={0.05} max={10}
+        onChange={(value) => setFactor(value)} value={factor}
+    >
+        <SliderTrack>
+            <SliderFilledTrack />
+        </SliderTrack>
+        <SliderThumb />
+    </Slider>;
 }
 
 export default FoodComparationDelta;
