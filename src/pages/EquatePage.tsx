@@ -28,6 +28,7 @@ const EquatePage: React.FC = () => {
     return (
         <FavoriteFoodsContext.Provider value={{ favoriteFoods, setFavoriteFoods }}>
             <Box px="3rem" pt="1rem">
+                <Box fontSize="3xl" fontWeight="semibold" mb="2rem">Food comparer</Box>
                 <SimpleGrid columns={{ "sm": 1, "md": 2 }} >
                     <Box>
                         <Box fontSize="xl" fontWeight="semibold" mb="0.75rem">
