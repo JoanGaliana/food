@@ -58,6 +58,8 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood })
 
             <Box mb="1">
                 <Box as="span" fontSize="2xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)} g</Box> of {targetFood.name}
+                <br />
+                <small>Compared to {sourceFoodQuantity.toFixed(2)}g of {sourceFood.name}</small>
             </Box>
 
             <table>
