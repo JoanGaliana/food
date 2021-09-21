@@ -1,4 +1,4 @@
-import { Box, Button, Center, FormControl, FormLabel, Input, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@chakra-ui/react";
+import { Box, Button, Center, FormControl, FormLabel, Input, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import classNames from "classnames";
 import React, { useCallback } from "react";
 import { useEffect } from "react";
@@ -25,17 +25,24 @@ const calcDelta = ({ foodFacts: targetFoodFacts }: Food, targetQuantity: number,
     })
 
 const getPositiveNegative = (n: number) => ({
-    negative: n < 0,
+    //Avoid inconsistencies while rendering rounded number -0.001 becomes -0.0 
+    negative: n < -0.009,
     positive: n > 0,
 })
+
+const formatDeltaValue = (n: number) => {
+    let formattedValue = n === -0 ? "0" : n.toFixed(2);
+
+    return n > 0 ? `+${formattedValue}` : formattedValue;
+};
 
 const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood }) => {
     const [factor, setFactor] = useState(1);
     const [sourceFoodQuantity, setsourceFoodQuantity] = useState(100);
 
-    const targetQuantity = sourceFoodQuantity * factor;
+    const targetFoodQuantity = sourceFoodQuantity * factor;
 
-    const deltaValues = calcDelta(targetFood, targetQuantity, sourceFood, sourceFoodQuantity);
+    const deltaValues = calcDelta(targetFood, targetFoodQuantity, sourceFood, sourceFoodQuantity);
 
     const getEquateByFn = useCallback(
         (factorName: FoodFactorEquateField) => () => setFactor(equateFood(sourceFood?.foodFacts, targetFood?.foodFacts, factorName)),
@@ -57,45 +64,95 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood })
             </FormControl>
 
             <Box mb="1">
-                <Box as="span" fontSize="2xl" fontWeight="bold" color="teal">{targetQuantity.toFixed(2)} g</Box> of {targetFood.name}
+                <Box as="span" fontSize="2xl" fontWeight="bold" color="teal">{targetFoodQuantity.toFixed(2)} g</Box> of {targetFood.name}
                 <br />
                 <small>Compared to {sourceFoodQuantity.toFixed(2)}g of {sourceFood.name}</small>
             </Box>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('kcal')}>Kcal</Button></th>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('kcal')}>ΔKcal</Button></Center></Th>
 
-                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('protein')}>Protein</Button></th>
-                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('carbs')}>Carbs</Button></th>
-                        <th><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('fats')}>Fats</Button></th>
-                    </tr>
-                </thead>
-                <tbody >
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('protein')}>ΔProtein</Button></Center></Th>
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('carbs')}>ΔCarbs</Button></Center></Th>
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('fats')}>ΔFats</Button></Center></Th>
+                    </Tr>
+                </Thead>
+                <Tbody >
+                    <Tr >
+                        <Td className={classNames(getPositiveNegative(deltaValues.kcal))} >
+                            <Center>{formatDeltaValue(deltaValues.kcal)}</Center>
+                        </Td>
 
-                    <tr >
-                        <td className={classNames(getPositiveNegative(deltaValues.kcal))} >
-                            <Center>{deltaValues.kcal.toFixed(2)}</Center>
-                        </td>
-
-                        <td className={classNames(getPositiveNegative(deltaValues.protein))}>
-                            <Center>{deltaValues.protein.toFixed(2)}</Center>
-                        </td>
-                        <td className={classNames(getPositiveNegative(deltaValues.carbs))}>
-                            <Center>{deltaValues.carbs.toFixed(2)}</Center>
-                        </td>
-                        <td className={classNames(getPositiveNegative(deltaValues.fats))}>
-                            <Center>{deltaValues.fats.toFixed(2)}</Center>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
+                        <Td className={classNames(getPositiveNegative(deltaValues.protein))}>
+                            <Center>{formatDeltaValue(deltaValues.protein)}</Center>
+                        </Td>
+                        <Td className={classNames(getPositiveNegative(deltaValues.carbs))}>
+                            <Center>{formatDeltaValue(deltaValues.carbs)}</Center>
+                        </Td>
+                        <Td className={classNames(getPositiveNegative(deltaValues.fats))}>
+                            <Center>{formatDeltaValue(deltaValues.fats)}</Center>
+                        </Td>
+                    </Tr>
+                </Tbody>
+            </Table>
             <Box my="4">
                 Factor: {factor.toFixed(2)}
             </Box>
             <FactorSlider setFactor={setFactor} factor={factor}></FactorSlider>
+
+            <Box></Box>
+            <Table>
+                <Thead>
+                    <Tr>
+                        <Th>Name</Th>
+
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('kcal')}>ΔKcal</Button></Center></Th>
+
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('protein')}>ΔProtein</Button></Center></Th>
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('carbs')}>ΔCarbs</Button></Center></Th>
+                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('fats')}>ΔFats</Button></Center></Th>
+                    </Tr>
+                </Thead>
+                <Tbody >
+                    <Tr >
+                        <Td>{sourceFood.name}</Td>
+
+                        <Td>
+                            <Center>{(sourceFood.foodFacts.kcal * (sourceFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+
+                        <Td>
+                            <Center>{(sourceFood.foodFacts.protein * (sourceFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+                        <Td>
+                            <Center>{(sourceFood.foodFacts.carbs * (sourceFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+                        <Td>
+                            <Center>{(sourceFood.foodFacts.fats * (sourceFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+                    </Tr>
+
+                    <Tr >
+                        <Td>{targetFood.name}</Td>
+
+                        <Td>
+                            <Center>{(targetFood.foodFacts.kcal * (targetFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+
+                        <Td>
+                            <Center>{(targetFood.foodFacts.protein * (targetFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+                        <Td>
+                            <Center>{(targetFood.foodFacts.carbs * (targetFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+                        <Td>
+                            <Center>{(targetFood.foodFacts.fats * (targetFoodQuantity / 100)).toFixed(2)}</Center>
+                        </Td>
+                    </Tr>
+                </Tbody>
+            </Table>
         </div>
     );
 }

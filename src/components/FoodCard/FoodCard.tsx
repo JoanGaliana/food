@@ -42,7 +42,8 @@ const FoodCard: React.FC<params> = ({ food, children }) => {
                     Food facts
                     <Box as="span" color="gray.600" fontSize="sm">/100g</Box>
                     <Box>
-                        <Badge px="2" borderRadius="full"> {food.foodFacts.kcal} Kcal</Badge>
+                        <Badge px="2" mr="2" borderRadius="full"> {food.foodFacts.kcal} Kcal</Badge>
+                        <Badge px="2" borderRadius="full"> {(food.foodFacts.kcal / food.foodFacts.protein).toFixed(0)} Kcal/Protein</Badge>
                     </Box>
                     <Box>
                         <Badge px="2" mr="2" borderRadius="full"> {food.foodFacts.protein} Protein</Badge>
