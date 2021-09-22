@@ -102,17 +102,17 @@ const FoodComparationDelta: React.FC<inputParams> = ({ sourceFood, targetFood })
             </Box>
             <FactorSlider setFactor={setFactor} factor={factor}></FactorSlider>
 
-            <Box></Box>
+            <Box mt="8" fontSize="xl">Totals</Box>
             <Table>
                 <Thead>
                     <Tr>
                         <Th>Name</Th>
 
-                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('kcal')}>ΔKcal</Button></Center></Th>
+                        <Th><Center>Kcal</Center></Th>
 
-                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('protein')}>ΔProtein</Button></Center></Th>
-                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('carbs')}>ΔCarbs</Button></Center></Th>
-                        <Th><Center><Button colorScheme="blue" variant="ghost" onClick={getEquateByFn('fats')}>ΔFats</Button></Center></Th>
+                        <Th><Center>Protein</Center></Th>
+                        <Th><Center>Carbs</Center></Th>
+                        <Th><Center>Fats</Center></Th>
                     </Tr>
                 </Thead>
                 <Tbody >
