@@ -15,7 +15,7 @@ const FoodCard: React.FC<params> = ({ food, children }) => {
     const { favoriteFoods, setFavoriteFoods } = useContext(FavoriteFoodsContext);
 
     return (
-        <Box key={food.id} maxW="xl" borderWidth="1px" borderRadius="lg" overflow="hidden">
+        <Box key={food.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
             <Flex justifyContent="center" alignContent="center" h="10rem" backgroundColor="blue.800">
                 <Image w="100" src={food.images[0]} alt={food.name} position="relative" />
             </Flex>
